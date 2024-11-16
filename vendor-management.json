@@ -1,0 +1,312 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Vendor Management API",
+    "description": "This is an API documentation for Vendor Management System. This is created for technical test purpose only.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Haris Naufal Rasyid",
+      "email": "harisrsyd@gmail.com",
+      "url": "https://www.linkedin.com/in/harisrsyd/"
+    }
+  },
+  "servers": [
+    {
+      "description": "Localhost Server",
+      "url": "https://localhost:9090/api/v1"
+    }
+  ],
+  "paths": {
+    "/vendors": {
+      "get": {
+        "tags": ["Vendor"],
+        "summary": "Get All Vendors",
+        "description": "Get all vendors data",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayVendors"
+                },
+                "examples": {
+                  "success-empty": {
+                    "value": []
+                  },
+                  "success-with-data": {
+                    "value": [
+                      {
+                        "id": "random-uuid-1234-5678-90ab-cdef12345678",
+                        "name": "PT Pro Sigmaka Mandiri",
+                        "city": "Jakarta",
+                        "businessType": "Outsourcing"
+                      },
+                      {
+                        "id": "random-uuid-1234-7823-90ab-fghi12345678",
+                        "name": "PT Javan Cipta Solusi",
+                        "city": "Yogyakarta",
+                        "businessType": "IT Services"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Vendor"],
+        "summary": "Create New Vendor",
+        "description": "Create new vendor data",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/RequestBodyVendor"
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vendor"
+                },
+                "examples": {
+                  "success": {
+                    "$ref": "#/components/examples/VendorSuccessResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
+    "/vendors/{id}": {
+      "get": {
+        "tags": ["Vendor"],
+        "summary": "Get Vendor By ID",
+        "description": "Get vendor data by ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get detail vendor data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vendor"
+                },
+                "examples": {
+                  "success": {
+                    "$ref": "#/components/examples/VendorSuccessResponse"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Vendor"],
+        "summary": "Update Vendor By ID",
+        "description": "Update vendor data by ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/RequestBodyVendor"
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Vendor"
+                },
+                "examples": {
+                  "": {
+                    "$ref": "#/components/examples/VendorSuccessResponse"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Vendor"],
+        "summary": "Delete Vendor By ID",
+        "description": "Delete vendor data by ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete vendor data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Vendor data has been deleted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "requestBodies": {
+      "RequestBodyVendor": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateOrUpdateVendor"
+            },
+            "example": {
+              "name": "PT Pro Sigmaka Mandiri",
+              "city": "Jakarta",
+              "businessType": "Outsourcing"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "id": {
+        "name": "id",
+        "in": "path",
+        "description": "Vendor ID",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "Vendor": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "businessType": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateOrUpdateVendor": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maximum": 100
+          },
+          "city": {
+            "type": "string",
+            "minLength": 1,
+            "maximum": 100
+          },
+          "businessType": {
+            "type": "string",
+            "minLength": 1,
+            "maximum": 255
+          }
+        }
+      },
+      "ArrayVendors": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Vendor"
+        }
+      }
+    },
+    "responses": {
+      "NotFound": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Vendor data not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "BadRequest": {
+        "description": "Bad Request, Validation Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Validation error, please check your request body"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "examples": {
+      "VendorSuccessResponse": {
+        "description": "Vendor Success Response",
+        "value": {
+          "id": "random-uuid-1234-5678-90ab-cdef12345678",
+          "name": "PT Pro Sigmaka Mandiri",
+          "city": "Jakarta",
+          "businessType": "Outsourcing"
+        }
+      }
+    }
+  }
+}
