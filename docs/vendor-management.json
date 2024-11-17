@@ -28,27 +28,26 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ArrayVendors"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/ArrayVendors"
+                    },
+                    "error": {
+                      "type": "null"
+                    }
+                  }
                 },
                 "examples": {
-                  "success-empty": {
-                    "value": []
+                  "success": {
+                    "$ref": "#/components/examples/ArrayVendorsResponse"
                   },
-                  "success-with-data": {
-                    "value": [
-                      {
-                        "id": "random-uuid-1234-5678-90ab-cdef12345678",
-                        "name": "PT Pro Sigmaka Mandiri",
-                        "city": "Jakarta",
-                        "businessType": "Outsourcing"
-                      },
-                      {
-                        "id": "random-uuid-1234-7823-90ab-fghi12345678",
-                        "name": "PT Javan Cipta Solusi",
-                        "city": "Yogyakarta",
-                        "businessType": "IT Services"
-                      }
-                    ]
+                  "empty": {
+                    "$ref": "#/components/examples/ArrayEmptyResponse"
                   }
                 }
               }
@@ -69,11 +68,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vendor"
+                  "$ref": "#/components/schemas/WebResponseSuccess"
                 },
                 "examples": {
                   "success": {
-                    "$ref": "#/components/examples/VendorSuccessResponse"
+                    "$ref": "#/components/examples/AddVendorSuccessResponse"
                   }
                 }
               }
@@ -101,7 +100,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vendor"
+                  "$ref": "#/components/schemas/WebResponseSuccess"
                 },
                 "examples": {
                   "success": {
@@ -134,7 +133,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Vendor"
+                  "$ref": "#/components/schemas/WebResponseSuccess"
                 },
                 "examples": {
                   "": {
@@ -167,16 +166,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "example": true
-                    },
-                    "message": {
-                      "type": "string",
-                      "example": "Vendor data has been deleted"
-                    }
+                  "$ref": "#/components/schemas/WebResponseSuccess"
+                },
+                "examples": {
+                  "deleteSuccess": {
+                    "$ref": "#/components/examples/DeleteVendorSuccessResponse"
                   }
                 }
               }
@@ -261,6 +255,21 @@
         "items": {
           "$ref": "#/components/schemas/Vendor"
         }
+      },
+      "WebResponseSuccess": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "number"
+          },
+          "data": {
+            "$ref": "#/components/schemas/Vendor"
+          },
+          "error": {
+            "type": "string",
+            "nullable": true
+          }
+        }
       }
     },
     "responses": {
@@ -271,7 +280,16 @@
             "schema": {
               "type": "object",
               "properties": {
-                "message": {
+                "status": {
+                  "type": "number",
+                  "example": 404
+                },
+                "data": {
+                  "type": "object",
+                  "nullable": true,
+                  "example": null
+                },
+                "error": {
                   "type": "string",
                   "example": "Vendor data not found"
                 }
@@ -287,9 +305,18 @@
             "schema": {
               "type": "object",
               "properties": {
-                "message": {
+                "status": {
+                  "type": "number",
+                  "example": 400
+                },
+                "data": {
+                  "type": "object",
+                  "nullable": true,
+                  "example": null
+                },
+                "error": {
                   "type": "string",
-                  "example": "Validation error, please check your request body"
+                  "example": "Vendor data not found"
                 }
               }
             }
@@ -301,10 +328,66 @@
       "VendorSuccessResponse": {
         "description": "Vendor Success Response",
         "value": {
-          "id": "random-uuid-1234-5678-90ab-cdef12345678",
-          "name": "PT Pro Sigmaka Mandiri",
-          "city": "Jakarta",
-          "businessType": "Outsourcing"
+          "status": 200,
+          "data": {
+            "id": "random-uuid-1234-5678-90ab-cdef12345678",
+            "name": "PT Pro Sigmaka Mandiri",
+            "city": "Jakarta",
+            "businessType": "Outsourcing"
+          },
+          "error": null
+        }
+      },
+      "AddVendorSuccessResponse": {
+        "description": "Vendor Success Response",
+        "value": {
+          "status": 200,
+          "data": {
+            "id": "random-uuid-1234-5678-90ab-cdef12345678",
+            "name": "PT Pro Sigmaka Mandiri",
+            "city": "Jakarta",
+            "businessType": "Outsourcing"
+          },
+          "error": null
+        }
+      },
+      "DeleteVendorSuccessResponse": {
+        "description": "Vendor Success Response",
+        "value": {
+          "status": 200,
+          "data": {
+            "message": "Vendor data has been deleted successfully."
+          },
+          "error": null
+        }
+      },
+      "ArrayVendorsResponse": {
+        "description": "Array Vendor Success Response",
+        "value": {
+          "status": 200,
+          "data": [
+            {
+              "id": "random-uuid-1234-5678-90ab-cdef12345678",
+              "name": "PT Pro Sigmaka Mandiri",
+              "city": "Jakarta",
+              "businessType": "Outsourcing"
+            },
+            {
+              "id": "random-uuid-1234-7823-90ab-fghi12345678",
+              "name": "PT Javan Cipta Solusi",
+              "city": "Yogyakarta",
+              "businessType": "IT Services"
+            }
+          ],
+          "error": null
+        }
+      },
+      "ArrayEmptyResponse": {
+        "description": "Array Empty Response",
+        "value": {
+          "status": 200,
+          "data": [],
+          "error": null
         }
       }
     }
