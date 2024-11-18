@@ -1,18 +1,22 @@
 package com.assignment.vendor_management.service;
 
+import com.assignment.vendor_management.entity.Role;
 import com.assignment.vendor_management.entity.Users;
 import com.assignment.vendor_management.model.UserRegisterRequest;
 import com.assignment.vendor_management.repository.UsersRepository;
-import com.assignment.vendor_management.security.BCrypt;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Slf4j
-public class UsersService {
+public class UsersService implements UserDetailsService {
    
    private UsersRepository usersRepository;
    private ValidationService validationService;
@@ -37,7 +41,14 @@ public class UsersService {
       user.setName(request.getName());
       user.setEmail(request.getEmail());
       user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
+      user.setRole(request.getRole() == Role.ADMIN? Role.ADMIN : Role.USER);
       
       usersRepository.save(user);
+   }
+   
+   @Override
+   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+      return usersRepository.findById(username)
+         .orElseThrow(() -> new UsernameNotFoundException(String.format("User with username '%s' not found", username)));
    }
 }

@@ -10,6 +10,8 @@ CREATE TABLE users
     UNIQUE (email)
 );
 
+ALTER TABLE users ADD COLUMN role VARCHAR(50) NOT NULL DEFAULT 'USER';
+
 SELECT * FROM users;
 
 CREATE TABLE vendors

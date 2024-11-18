@@ -1,5 +1,6 @@
 package com.assignment.vendor_management.model;
 
+import com.assignment.vendor_management.entity.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -27,4 +28,6 @@ public class UserRegisterRequest {
    @NotBlank(message = "Password is required")
    @Size(max = 100, message = "Password is too long")
    private String password;
+   
+   private Role role;
 }

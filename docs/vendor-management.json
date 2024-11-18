@@ -17,11 +17,74 @@
     }
   ],
   "paths": {
+    "/user/register": {
+      "post": {
+        "tags": ["User"],
+        "summary": "Register New User",
+        "description": "Register new user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "number",
+                      "example": 201
+                    },
+                    "data": {
+                      "type": "string",
+                      "example": "User registered successfully, You can access immediately with your username and password"
+                    },
+                    "error": {
+                      "type": "null"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          }
+        }
+      }
+    },
     "/vendors": {
       "get": {
         "tags": ["Vendor"],
         "summary": "Get All Vendors",
         "description": "Get all vendors data",
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -52,6 +115,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         }
       },
@@ -59,6 +125,11 @@
         "tags": ["Vendor"],
         "summary": "Create New Vendor",
         "description": "Create new vendor data",
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
         "requestBody": {
           "$ref": "#/components/requestBodies/RequestBodyVendor"
         },
@@ -80,6 +151,9 @@
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         }
       }
@@ -89,6 +163,11 @@
         "tags": ["Vendor"],
         "summary": "Get Vendor By ID",
         "description": "Get vendor data by ID",
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
         "parameters": [
           {
             "$ref": "#/components/parameters/id"
@@ -112,6 +191,9 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         }
       },
@@ -119,6 +201,11 @@
         "tags": ["Vendor"],
         "summary": "Update Vendor By ID",
         "description": "Update vendor data by ID",
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
         "parameters": [
           {
             "$ref": "#/components/parameters/id"
@@ -148,6 +235,9 @@
           },
           "400": {
             "$ref": "#/components/responses/BadRequest"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         }
       },
@@ -155,6 +245,11 @@
         "tags": ["Vendor"],
         "summary": "Delete Vendor By ID",
         "description": "Delete vendor data by ID",
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
         "parameters": [
           {
             "$ref": "#/components/parameters/id"
@@ -178,6 +273,9 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         }
       }
@@ -322,6 +420,17 @@
             }
           }
         }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized",
+        "content": {
+          "string": {
+            "schema": {
+              "type": "string"
+            },
+            "example": "Unauthorized: You must register or log in to access this resource."
+          }
+        }
       }
     },
     "examples": {
@@ -389,6 +498,12 @@
           "data": [],
           "error": null
         }
+      }
+    },
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic"
       }
     }
   }
